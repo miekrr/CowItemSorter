@@ -5,9 +5,13 @@ public abstract class  CowItem implements CowItemValue {
 
     private String itemName;
     private String itemID;
-    private int itemUID;
+    private String itemUID;
     private boolean itemRecyclable;
-    private Double itemValue;
+
+    public CowItem(){
+        itemName = "";
+        itemID = "";
+    }
 
     public String getItemName() {
         return itemName;
@@ -25,11 +29,11 @@ public abstract class  CowItem implements CowItemValue {
         this.itemID = itemID;
     }
 
-    public int getItemUID() {
+    public String getItemUID() {
         return itemUID;
     }
 
-    public void setItemUID(int itemUID) {
+    public void setItemUID(String itemUID) {
         this.itemUID = itemUID;
     }
 
