@@ -86,5 +86,10 @@ public class Parser {
                 itemsToKeep.put(c.getItemID(), c);
             }
         }
+    private void writeFile(String data) throws IOException {
+        FileWriter fw = new FileWriter("ids-to-delete.txt");
+        fw.write(data);
+        fw.close();
+
     }
 }
