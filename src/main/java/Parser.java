@@ -82,6 +82,7 @@ public class Parser {
         }
 
         System.out.print(items.toString());
+        keepUsefulItems();
     }
 
     public void keepUsefulItems()
@@ -89,9 +90,16 @@ public class Parser {
         Map<String, CowItem> itemsToKeep = new HashMap<>(25);
 
         for (CowItem c : cowItems){
-            CowItem cowItemStored = itemsToKeep.get(c.getItemID());
-            if(cowItemStored.getItemValue() < c.getItemValue()){
-                itemsToKeep.put(c.getItemID(), c);
+            CowItem cowItemStored = itemsToKeep.get(c.getItemName());
+
+            if((cowItemStored == null) || cowItemStored.getItemValue() < c.getItemValue()){
+                itemsToKeep.put(c.getItemName(), c);
+            }
+        }
+
+        getItemsToDelete(itemsToKeep);
+    }
+
     private void getItemsToDelete(Map<String, CowItem> itemsToKeep) {
         Iterator it = itemsToKeep.entrySet().iterator();
         StringBuilder sb = new StringBuilder();
