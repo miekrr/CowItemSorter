@@ -75,7 +75,6 @@ public class Parser {
 
                         break;
                 }
-                cowItems.add(item);
             }
             if(validItem)
                 cowItems.add(item);
