@@ -92,8 +92,31 @@ public class Parser {
             CowItem cowItemStored = itemsToKeep.get(c.getItemID());
             if(cowItemStored.getItemValue() < c.getItemValue()){
                 itemsToKeep.put(c.getItemID(), c);
+    private void getItemsToDelete(Map<String, CowItem> itemsToKeep) {
+        Iterator it = itemsToKeep.entrySet().iterator();
+        StringBuilder sb = new StringBuilder();
+
+        for( String key:  itemsToKeep.keySet() ) {
+            for( CowItem c : cowItems) {
+                if (key.equals(c.getItemName()))
+                {
+                    if( itemsToKeep.get(key).getItemUID().compareTo(c.getItemUID()) != 0)
+                    {
+                        sb.append(c.getItemUID() + " " + c.getItemID() + "\n");
+                    }
+                    else {
+                        System.out.println("This works ! " + c.getItemUID());
+                    }
+                }
             }
         }
+        try{
+            writeFile(sb.toString());
+        } catch (Exception ex) {
+
+        }
+    }
+
     private void writeFile(String data) throws IOException {
         FileWriter fw = new FileWriter("ids-to-delete.txt");
         fw.write(data);
