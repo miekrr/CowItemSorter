@@ -72,7 +72,38 @@ public class Parser {
                                 validItem = true;
                             }
                         }
+                        if (item.getItemName().startsWith("pax_")) {
+                            element.getAllElements();
+                            String strGoldHour = element.getAllElements().get(6).childNodes().get(1).toString().trim();
+                            String strGoldRate = element.getAllElements().get(6).childNodes().get(4).toString().trim();
 
+                            String s = strGoldHour.substring(0, strGoldHour.indexOf(" "));
+                            double goldPerHour = Double.parseDouble(s);
+                            item.goldPercent = goldPerHour;
+                            s = strGoldRate.substring(0, strGoldRate.indexOf("%"));
+
+                            double goldGain = Double.parseDouble(s);
+                            item.goldRate =  goldGain;
+                            System.out.println("Gold per hour: " + goldPerHour + " gain: " + goldGain);
+                            validItem = true;
+                        }
+                        if (item.getItemName().startsWith("bull")  && !item.getItemName().endsWith("box") &&
+                                item.getItemName().compareTo("bullgrillz") != 0) {
+                            String strGoldRate = element.getAllElements().get(5).childNodes().get(4).toString().trim();
+                            String s = strGoldRate.substring(0, strGoldRate.indexOf(" "));
+                            double goldPerHour = Double.parseDouble(s);
+                            item.goldPercent = goldPerHour;
+                            validItem = true;
+                        }
+                        break;
+                    case "data-item-uid":
+                        item.setItemUID(a.getValue());
+                        break;
+                    case "data-item-id-numeric":
+                        item.setItemID(a.getValue());
+                        break;
+                    case "data-item-recycle":
+                        item.setItemRecyclable(a.getValue().compareTo("1") == 0 ? true : false);
                         break;
                 }
             }
