@@ -27,33 +27,35 @@ public class Parser {
     public void getItems() {
         Document doc = Jsoup.parse(hData);
 
-        Elements content = doc.getElementsByClass("inventory");
         Elements items = doc.getElementsByClass("inventory-slot");
 
         for (Element e : items)
         {
             Attributes attribs = e.childNode(0).attributes();
+            CowClothes item = new CowClothes();
+            boolean validItem = false;
             for(Attribute a : attribs)
             {
-                CowClothes item = new CowClothes();
-
                 switch(a.getKey()) {
                     case "data-item-id":
                         System.out.println( a.getValue() );
-                        item.setItemID(a.getValue());
+                        item.setItemName(a.getValue());
                         break;
                     case "data-original-title":
                         Element element = e.html(a.getValue());
                         Element dat = element.children().get(3);
                         List<TextNode> str = dat.textNodes();
 
-                        if (item.getItemID().startsWith("death"))
+                        if (item.getItemName().startsWith("death") && !item.getItemName().endsWith("dust"))
                         {
-                            String strGoldPerDeath = element.getAllElements().get(6).child(1).toString().trim();
+                            String strGoldPerDeath = element.getAllElements().get(6).childNodes().get(1).toString()
+                                    .trim();
                             strGoldPerDeath = strGoldPerDeath.substring(0, strGoldPerDeath.indexOf(" "));
+                            item.goldRate =  Double.parseDouble(strGoldPerDeath);
+                            validItem = true;
                         }
 
-                        if (item.getItemID().startsWith("cow"))
+                        if (item.getItemName().startsWith("cow"))
                         {
                             if(str.size() == 3) {
                                 String strGoldHour = str.get(1).toString().trim();
@@ -61,9 +63,13 @@ public class Parser {
 
                                 String s = strGoldHour.substring(0, strGoldHour.indexOf(" "));
                                 double goldPerHour = Double.parseDouble(s);
+                                item.goldPercent = goldPerHour;
                                 s = strGoldRate.substring(0, strGoldRate.indexOf("%"));
+
                                 double goldGain = Double.parseDouble(s);
+                                item.goldRate =  goldGain;
                                 System.out.println("Gold per hour: " + goldPerHour + " gain: " + goldGain);
+                                validItem = true;
                             }
                         }
 
@@ -71,6 +77,8 @@ public class Parser {
                 }
                 cowItems.add(item);
             }
+            if(validItem)
+                cowItems.add(item);
         }
 
         System.out.print(items.toString());
