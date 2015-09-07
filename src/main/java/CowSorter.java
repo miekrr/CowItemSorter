@@ -30,4 +30,22 @@ public class CowSorter {
     }
 
 
+    public static class CowItemWriter
+    {
+        private String FILE_OUT_DATA;
+
+        public static void SaveTo(String path) {
+            try {
+                writeFile(sb.toString());
+            } catch (Exception ex) { }
+
+        }
+
+        private void writeFile(String data) throws IOException {
+            FileWriter fw = new FileWriter(FILE_OUT_DATA);
+            fw.write(data);
+            fw.close();
+        }
+    }
+
 }
