@@ -5,7 +5,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by mike on 8/24/2015.
@@ -107,59 +108,16 @@ public class Parser {
             boolean validItem = false;
             for(Attribute a : attribs)
             {
+                validItem = setDataForCowItem(e, item, a);
             }
             if(validItem)
                 cowItems.add(item);
         }
-
-        System.out.print(items.toString());
-        keepUsefulItems();
     }
 
-    public void keepUsefulItems()
-    {
-        Map<String, CowItem> itemsToKeep = new HashMap<>(25);
-
-        for (CowItem c : cowItems){
-            CowItem cowItemStored = itemsToKeep.get(c.getItemName());
-
-            if((cowItemStored == null) || cowItemStored.getItemValue() < c.getItemValue()){
-                itemsToKeep.put(c.getItemName(), c);
-            }
-        }
-
-        getItemsToDelete(itemsToKeep);
+    public List<CowItem> getItems() {
+        parseHtml();
+        return cowItems;
     }
 
-    private void getItemsToDelete(Map<String, CowItem> itemsToKeep) {
-        Iterator it = itemsToKeep.entrySet().iterator();
-        StringBuilder sb = new StringBuilder();
-
-        for( String key:  itemsToKeep.keySet() ) {
-            for( CowItem c : cowItems) {
-                if (key.equals(c.getItemName()))
-                {
-                    if( itemsToKeep.get(key).getItemUID().compareTo(c.getItemUID()) != 0)
-                    {
-                        sb.append(c.getItemUID() + " " + c.getItemID() + "\n");
-                    }
-                    else {
-                        System.out.println("This works ! " + c.getItemUID());
-                    }
-                }
-            }
-        }
-        try{
-            writeFile(sb.toString());
-        } catch (Exception ex) {
-
-        }
-    }
-
-    private void writeFile(String data) throws IOException {
-        FileWriter fw = new FileWriter("ids-to-delete.txt");
-        fw.write(data);
-        fw.close();
-
-    }
 }
