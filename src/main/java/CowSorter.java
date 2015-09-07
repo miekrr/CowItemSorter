@@ -7,31 +7,38 @@ import java.util.Map;
 public class CowSorter {
     private List<CowItem> _cowItems;
 
-    public CowSortItems setItemsToSort(List<CowItem> cowItems) {
+    public KeepItem setItemsToSort(List<CowItem> cowItems) {
         _cowItems = cowItems;
-        return new CowSortItems();
+
+        return new KeepItem(cowItems);
     }
 
-    public class CowSortItems
-    {
-        public CowSortItems()
-        {
 
+    public class KeepItem
+    {
+        private static final int MAX_HASH_MAP_SIZE = 25;
+
+        List<CowItem> _cowItems;
+
+        public KeepItem(List<CowItem> cowItems)
+        {
+            _cowItems = cowItems;
         }
 
-        public KeepItem getItemsToDelete(Map<String, CowItem> itemsToKeep) {
-            StringBuilder sb = new StringBuilder();
+        public CowItemWriter filterBestItems()
+        {
+            Map<String, CowItem> itemsToKeep = new HashMap<>(MAX_HASH_MAP_SIZE);
 
-            for (String key : itemsToKeep.keySet()) {
-                for (CowItem c : _cowItems) {
-                    if (key.equals(c.getItemName())) {
-                        if (itemsToKeep.get(key).getItemUID().compareTo(c.getItemUID()) != 0) {
-                            sb.append(c.getItemUID() + " " + c.getItemID() + "\n");
-                        }
-                    }
+            for (CowItem c : _cowItems){
+                CowItem cowItemStored = itemsToKeep.get(c.getItemName());
+
+                if((cowItemStored == null) || cowItemStored.getItemValue() < c.getItemValue()){
+                    itemsToKeep.put(c.getItemName(), c);
                 }
             }
-            return new KeepItem();
+            CowSortItems sortItems = new CowSortItems(itemsToKeep);
+
+            return sortItems.filterBestItems();
         }
     }
 
