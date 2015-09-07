@@ -53,13 +53,20 @@ public class CowSorter {
         }
     }
 
-    public static class CowItemWriter
+    public class CowItemWriter
     {
         private String FILE_OUT_DATA;
+        private String _data;
 
-        public static void SaveTo(String path) {
+        public CowItemWriter(String data)
+        {
+            _data = data;
+        }
+
+        public void SaveTo(String path) {
+            FILE_OUT_DATA = path;
             try {
-                writeFile(sb.toString());
+                writeFile(_data);
             } catch (Exception ex) { }
 
         }
