@@ -6,9 +6,17 @@ public class Main {
     public static void main(String[] args) {
 
         if( args.length == 2) {
-            Parser parser = new Parser("D:/SourceCode/cow-site-parser/inventory.html");
+            final String inputHtmlPath = args[0];
+            final String outputFilePath = args[1];
+
+            Parser parser = new Parser(inputHtmlPath);
             List<CowItem> cowItems = parser.getItems();
 
+            CowSorter sorter = new CowSorter();
+
+            sorter.setItemsToSort(cowItems)
+                    .filterBestItems()
+                    .SaveTo(outputFilePath);
         }
         else
         {
