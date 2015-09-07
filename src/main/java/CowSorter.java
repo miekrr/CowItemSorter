@@ -29,6 +29,23 @@ public class CowSorter {
         }
     }
 
+    public static class KeepItem
+    {
+        public static Map<String, CowItem> keepUsefulItems(List<CowItem> cowItems)
+        {
+            Map<String, CowItem> itemsToKeep = new HashMap<>(25);
+
+            for (CowItem c : cowItems){
+                CowItem cowItemStored = itemsToKeep.get(c.getItemName());
+
+                if((cowItemStored == null) || cowItemStored.getItemValue() < c.getItemValue()){
+                    itemsToKeep.put(c.getItemName(), c);
+                }
+            }
+
+            return itemsToKeep;
+        }
+    }
 
     public static class CowItemWriter
     {
