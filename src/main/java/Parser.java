@@ -108,7 +108,10 @@ public class Parser {
             boolean validItem = false;
             for(Attribute a : attribs)
             {
-                validItem = setDataForCowItem(e, item, a);
+                if( setDataForCowItem(e, item, a) )
+                {
+                    validItem = true;
+                }
             }
             if(validItem)
                 cowItems.add(item);
