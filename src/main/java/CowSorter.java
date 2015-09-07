@@ -42,21 +42,30 @@ public class CowSorter {
         }
     }
 
-    public static class KeepItem
+
+    private class CowSortItems
     {
-        public static Map<String, CowItem> keepUsefulItems(List<CowItem> cowItems)
+        private Map<String, CowItem> _itemsToKeep;
+
+        public CowSortItems(Map<String, CowItem> itemsToKeep)
         {
-            Map<String, CowItem> itemsToKeep = new HashMap<>(25);
+            _itemsToKeep = itemsToKeep;
+        }
 
-            for (CowItem c : cowItems){
-                CowItem cowItemStored = itemsToKeep.get(c.getItemName());
+        public CowItemWriter filterBestItems() {
+            StringBuilder sb = new StringBuilder();
 
-                if((cowItemStored == null) || cowItemStored.getItemValue() < c.getItemValue()){
-                    itemsToKeep.put(c.getItemName(), c);
+            for (String key : _itemsToKeep.keySet()) {
+                for (CowItem c : _cowItems) {
+                    if (key.equals(c.getItemName())) {
+                        if (_itemsToKeep.get(key).getItemUID().compareTo(c.getItemUID()) != 0) {
+                            sb.append(c.getItemUID() + " " + c.getItemID() + "\n");
+                        }
+                    }
                 }
             }
 
-            return itemsToKeep;
+            return new CowItemWriter(sb.toString());
         }
     }
 
